@@ -3,7 +3,7 @@ require('dotenv').config();
 
 
 const connectToMongo = async ()=>{
-    const mongo_key = process.env.mongo_URI
+    const mongo_key = process.env.MONGO_URI
     if(!mongo_key){
         console.error("Mongo key is not defined.")
         process.exit(1);

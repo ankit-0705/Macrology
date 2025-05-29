@@ -11,7 +11,7 @@ require('dotenv').config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const jwt_Token = process.env.jwt_Key;
+const jwt_Token = process.env.JWT_SECRET;
 
 const isEmailOrPhone = (value) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
