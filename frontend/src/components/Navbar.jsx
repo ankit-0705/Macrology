@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import MacroContext from '../context/MacroContext';
 
 function Navbar() {
+
+    const {dailyGoals, setDailyGoals} = useContext(MacroContext);
 
     const handleClear = async () => {
     const confirmDelete = window.confirm('Are you sure you want to delete all macro entries?');
@@ -18,8 +21,23 @@ function Navbar() {
     };
 
     const handleGoal = () => {
-        alert('Coming Soon.');
+    const newEnergy = prompt('Enter daily calorie goal (kcal):', dailyGoals.energy_kcal);
+    const newProtein = prompt('Enter daily protein goal (g):', dailyGoals.protein_g);
+    const newFat = prompt('Enter daily fat goal (g):', dailyGoals.fat_g);
+    const newCarb = prompt('Enter daily carb goal (g):', dailyGoals.carb_g);
+
+    if (newEnergy && newProtein && newFat && newCarb) {
+      setDailyGoals({
+        energy_kcal: Number(newEnergy),
+        protein_g: Number(newProtein),
+        fat_g: Number(newFat),
+        carb_g: Number(newCarb),
+      });
+      alert('Goals updated!');
+    } else {
+      alert('Goal update cancelled or invalid input');
     }
+  };
 
   return (
     <>

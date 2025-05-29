@@ -4,7 +4,15 @@ import axios from 'axios';
 
 const MacroState = (props) => {
   const [profileInfo, setProfileInfo] = useState(null);
+
   const [macroInfo, setMacroInfo] = useState(null);
+
+  const [dailyGoals, setDailyGoals] = useState({
+    energy_kcal: 2000,
+    protein_g: 150,
+    fat_g: 80,
+    carb_g: 200,
+  });
 
   // Fetch User Info
   const infoGetter = async () => {
@@ -25,23 +33,22 @@ const MacroState = (props) => {
   };
 
   // Fetch Macro Logs for a Specific Date (default = today)
-  const fetchMacroInfo = async (date) => {
-    if (!profileInfo?._id) return;
+  const fetchMacroInfo = async () => {
+  if (!profileInfo?._id) return;
 
-    const targetDate = date || new Date().toISOString().split('T')[0];
+  try {
+    const res = await axios.get('http://127.0.0.1:5000/api/macros/logs', {
+      params: {
+        userId: profileInfo._id,
+        year: new Date().getFullYear() // fetch entries for full current year
+      }
+    });
+    setMacroInfo(res.data);
+  } catch (error) {
+    console.error('Failed to fetch macro logs:', error.response?.data || error.message);
+  }
+};
 
-    try {
-      const res = await axios.get('http://127.0.0.1:5000/api/macros/logs', {
-        params: {
-          userId: profileInfo._id,
-          date: targetDate
-        }
-      });
-      setMacroInfo(res.data);
-    } catch (error) {
-      console.error('Failed to fetch macro logs:', error.response?.data || error.message);
-    }
-  };
 
   // Fetch profile on mount
   useEffect(() => {
@@ -70,7 +77,7 @@ const MacroState = (props) => {
   }, [profileInfo]);
 
   return (
-    <MacroContext.Provider value={{ profileInfo, infoGetter, macroInfo, fetchMacroInfo }}>
+    <MacroContext.Provider value={{ profileInfo, infoGetter, macroInfo, fetchMacroInfo, dailyGoals, setDailyGoals }}>
       {props.children}
     </MacroContext.Provider>
   );

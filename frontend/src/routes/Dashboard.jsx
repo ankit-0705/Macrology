@@ -10,27 +10,28 @@ function Dashboard() {
   const [selectedFood, setSelectedFood] = useState(null);
   const [selectedMeal, setSelectedMeal] = useState('');
 
-  const { profileInfo, macroInfo, infoGetter } = useContext(MacroContext);
+  const { profileInfo, macroInfo, infoGetter, dailyGoals } = useContext(MacroContext);
 
   // Compute totals from macroInfo (instead of local meals state)
+  const todayISO = new Date().toISOString().split('T')[0];
+  const todaysEntries = (macroInfo || []).filter(item => item.date === todayISO);
+
   const totals = { energy_kcal: 0, protein_g: 0, fat_g: 0, carb_g: 0 };
   const meals = { breakfast: [], lunch: [], dinner: [] };
 
-  if (macroInfo && Array.isArray(macroInfo)) {
-    macroInfo.forEach(item => {
-      totals.energy_kcal += item.energy_kcal || 0;
-      totals.protein_g += item.protein_g || 0;
-      totals.fat_g += item.fat_g || 0;
-      totals.carb_g += item.carb_g || 0;
+  todaysEntries.forEach(item => {
+    totals.energy_kcal += item.energy_kcal || 0;
+    totals.protein_g += item.protein_g || 0;
+    totals.fat_g += item.fat_g || 0;
+    totals.carb_g += item.carb_g || 0;
 
-      if (meals[item.meal]) {
-        meals[item.meal].push(item);
-      }
-    });
-  }
+    if (meals[item.meal]) {
+      meals[item.meal].push(item);
+    }
+  });
+
 
   const COLORS = ['#22c55e', '#1f2937'];
-  const dailyGoals = { energy_kcal: 2000, protein_g: 150, fat_g: 80, carb_g: 200 };
 
   // Data arrays for Pie charts based on totals and goals
   const dataCalories = [
@@ -105,33 +106,38 @@ function Dashboard() {
       <div className="min-h-screen p-7">
 
         {/* Streak Tracker */}
-          <div className='bg-base-300 p-3 my-3'>
-            <h6>Streak Tracker</h6>
-            <div className="my-2">
-              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0.75rem,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(1rem,_1fr))] gap-1">
-                {(() => {
-                  const datesWithEntries = new Set(
-                    (macroInfo || []).map(item => item.date)
+        <div className='bg-base-300 p-3 my-3'>
+          <h6>Streak Tracker</h6>
+          <div className="my-2">
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(0.75rem,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(1rem,_1fr))] gap-1">
+              {(() => {
+                const datesWithEntries = new Set(
+                  (macroInfo || []).map(item => item.date)
+                );
+
+                const currentYear = new Date().getFullYear();
+                const startDate = new Date(currentYear, 0, 1); // Jan 1 current year
+                const daysInYear = (new Date(currentYear + 1, 0, 1) - startDate) / (1000 * 60 * 60 * 24); // 365 or 366
+
+                return Array.from({ length: daysInYear }).map((_, i) => {
+                  const date = new Date(startDate);
+                  date.setDate(startDate.getDate() + i);
+                  const isoDate = date.toISOString().split('T')[0];
+
+                  const isActive = datesWithEntries.has(isoDate);
+                  return (
+                    <div
+                      key={isoDate}
+                      className={`w-full aspect-square rounded ${isActive ? 'bg-green-500' : 'bg-gray-700'}`}
+                      title={isoDate}
+                    ></div>
                   );
-
-                  return Array.from({ length: 365 }).map((_, i) => {
-                    const date = new Date();
-                    date.setDate(date.getDate() + i); // Change from - to + to look ahead
-                    const isoDate = date.toISOString().split('T')[0];
-
-                    const isActive = datesWithEntries.has(isoDate);
-                    return (
-                      <div
-                        key={isoDate}
-                        className={`w-full aspect-square rounded ${isActive ? 'bg-green-500' : 'bg-gray-700'}`}
-                        title={isoDate}
-                      ></div>
-                    );
-                  });
-                })()}
-              </div>
+                });
+              })()}
             </div>
           </div>
+        </div>
+
 
 
         {/* Calories Pie */}

@@ -108,6 +108,12 @@ function ProfilePage() {
     },
   };
 
+  // Calculate month name and year for display under the chart
+  const now = new Date();
+  const displayedDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+  const monthName = displayedDate.toLocaleString('default', { month: 'long' });
+  const year = displayedDate.getFullYear();
+
   return (
     <>
       <Navbar />
@@ -170,17 +176,25 @@ function ProfilePage() {
             </div>
           </div>
 
-          {/* 🔥 Streak Tracker */}
-          <div className="bg-base-300 p-3 my-3">
+          {/* Streak Tracker */}
+          <div className='bg-base-300 p-3 my-3'>
             <h6>Streak Tracker</h6>
             <div className="my-2">
               <div className="grid grid-cols-[repeat(auto-fit,_minmax(0.75rem,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(1rem,_1fr))] gap-1">
                 {(() => {
-                  const datesWithEntries = new Set((macroInfo || []).map(item => item.date));
-                  return Array.from({ length: 365 }).map((_, i) => {
-                    const date = new Date();
-                    date.setDate(date.getDate() + i); // Show today and next 364 days
+                  const datesWithEntries = new Set(
+                    (macroInfo || []).map(item => item.date)
+                  );
+
+                  const currentYear = new Date().getFullYear();
+                  const startDate = new Date(currentYear, 0, 1); // Jan 1 current year
+                  const daysInYear = (new Date(currentYear + 1, 0, 1) - startDate) / (1000 * 60 * 60 * 24); // 365 or 366
+
+                  return Array.from({ length: daysInYear }).map((_, i) => {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
                     const isoDate = date.toISOString().split('T')[0];
+
                     const isActive = datesWithEntries.has(isoDate);
                     return (
                       <div
@@ -195,6 +209,7 @@ function ProfilePage() {
             </div>
           </div>
 
+
           {/* 📊 Chart */}
           <div className="bg-base-300 p-5 mx-5 rounded-lg my-5">
             <div className="flex justify-between items-center mb-4">
@@ -205,6 +220,7 @@ function ProfilePage() {
               </div>
             </div>
             <Bar options={chartOptions} data={chartData} />
+            <p className="mt-3 text-center text-gray-400">{monthName} {year}</p>
           </div>
         </main>
       </div>

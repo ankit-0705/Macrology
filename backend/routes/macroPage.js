@@ -71,24 +71,36 @@ router.post('/add', async (req, res) => {
   }
 });
 
-// Route 3: Get macro entries for a specific user and date
+
+// Route 3: Get macro entries for a specific user and date OR year
 router.get('/logs', async (req, res) => {
-  const { userId, date } = req.query;
+  const { userId, date, year } = req.query;
 
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
 
-  const targetDate = date || new Date().toISOString().split('T')[0];
+  const query = { userId };
+
+  if (date) {
+    // Specific day query
+    query.date = date;
+  } else if (year) {
+    // Whole year query
+    const startOfYear = `${year}-01-01`;
+    const endOfYear = `${year}-12-31`;
+    query.date = { $gte: startOfYear, $lte: endOfYear };
+  }
 
   try {
-    const logs = await Macro.find({ userId, date: targetDate }).sort({ meal: 1, createdAt: 1 });
+    const logs = await Macro.find(query).sort({ date: 1, meal: 1, createdAt: 1 });
     res.json(logs);
   } catch (error) {
     console.error('Error fetching macro logs:', error);
     res.status(500).json({ error: 'Server error while fetching logs' });
   }
 });
+
 
 // Route 4: Delete all macro entries
 router.delete('/deleteAll', async (req, res) => {
