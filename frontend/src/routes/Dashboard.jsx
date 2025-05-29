@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts';
 import MacroContext from '../context/MacroContext';
+const backendUrl = process.env.REACT_APP_API_BASE_URL;
 
 function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +60,7 @@ function Dashboard() {
     const fetchFoodItems = async () => {
       if (!searchQuery) return setSearchResults([]);
       try {
-        const res = await axios.get(`http://127.0.0.1:5000/api/macros/search?query=${searchQuery}`);
+        const res = await axios.get(`${backendUrl}/api/macros/search?query=${searchQuery}`);
         setSearchResults(res.data);
       } catch (err) {
         console.error(err);
@@ -87,7 +88,7 @@ function Dashboard() {
     };
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/macros/add', foodData);
+      await axios.post(`${backendUrl}/api/macros/add`, foodData);
       // After adding, refetch macro info to update UI
       if (infoGetter) infoGetter();
     } catch (error) {

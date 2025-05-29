@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Typewriter } from 'react-simple-typewriter';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import MacroContext from '../context/MacroContext';
+const backendUrl = process.env.REACT_APP_API_BASE_URL;
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:5000/api/user/register", formData);
+      await axios.post(`${backendUrl}/api/user/register`, formData);
       navigate('/login');
     } catch (error) {
       console.error("Some Error Occurred!!", error);
@@ -37,21 +37,7 @@ function RegisterPage() {
     navigate('/login');
   }
 
-  // useEffect(()=>{
-  //   const checkUser = async ()=>{
-  //     try {
-  //       const token = localStorage.getItem('auth-token');
-  //       const {data} = await axios.post('http://127.0.0.1:5000/api/user/getuser',{},{headers:{'auth-token':token}});
-  //       if(data && data.name){
-  //         navigate('/login');
-  //       }
-  //     } catch (error) {
-  //       console.log('Staying on register page.');
-  //     }
-  //   }
-  //   checkUser();
-  // },[]);
-
+  
   return (
     <div className="hero bg-base-200 min-h-screen p-5">
       <div className="hero-content flex-col lg:flex-col gap-9">

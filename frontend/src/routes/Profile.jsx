@@ -13,6 +13,8 @@ import {
   Legend
 } from 'chart.js';
 
+const backendUrl = process.env.REACT_APP_API_BASE_URL;
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function ProfilePage() {
@@ -38,7 +40,7 @@ function ProfilePage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('auth-token');
-      await axios.put('http://127.0.0.1:5000/api/user/updateuser', editInfo, {
+      await axios.put(`${backendUrl}/api/user/updateuser`, editInfo, {
         headers: { 'auth-token': token }
       });
       await infoGetter();
