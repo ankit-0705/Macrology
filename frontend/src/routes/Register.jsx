@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Typewriter } from 'react-simple-typewriter';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const backendUrl = process.env.REACT_APP_API_BASE_URL;
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -24,6 +24,7 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(backendUrl);
     try {
       await axios.post(`${backendUrl}/api/user/register`, formData);
       navigate('/login');

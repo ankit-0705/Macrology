@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import MacroContext from './MacroContext';
 import axios from 'axios';
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 const MacroState = (props) => {
   const [profileInfo, setProfileInfo] = useState(null);
@@ -22,7 +23,7 @@ const MacroState = (props) => {
         console.error("No token found!!!");
       }
       const response = await axios.post(
-        'http://127.0.0.1:5000/api/user/getuser',
+        `${backendUrl}/api/user/getuser`,
         {},
         { headers: { 'auth-token': token } }
       );
@@ -37,7 +38,7 @@ const MacroState = (props) => {
   if (!profileInfo?._id) return;
 
   try {
-    const res = await axios.get('http://127.0.0.1:5000/api/macros/logs', {
+    const res = await axios.get(`${backendUrl}/api/macros/logs`, {
       params: {
         userId: profileInfo._id,
         year: new Date().getFullYear() // fetch entries for full current year

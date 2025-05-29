@@ -13,7 +13,7 @@ import {
   Legend
 } from 'chart.js';
 
-const backendUrl = process.env.REACT_APP_API_BASE_URL;
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 

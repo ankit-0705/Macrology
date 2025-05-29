@@ -3,7 +3,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts';
 import MacroContext from '../context/MacroContext';
-const backendUrl = process.env.REACT_APP_API_BASE_URL;
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');

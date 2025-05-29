@@ -3,7 +3,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MacroContext from '../context/MacroContext';
-const backendUrl = process.env.REACT_APP_API_BASE_URL;
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 
 function LoginPage() {
@@ -25,6 +25,7 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(backendUrl);
     try {
       const res = await axios.post(`${backendUrl}/api/user/login`, formData);
       localStorage.setItem('auth-token',res.data.jwtToken);
