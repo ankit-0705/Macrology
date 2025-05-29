@@ -10,7 +10,9 @@ const connectToMongo = async ()=>{
     }
 
     try {
-        await mongoose.connect(mongo_key);
+        await mongoose.connect(mongo_key, {
+        dbName: 'macrology'
+        });
         console.log('Connected to MongoDB Successfully.')
     } catch (error) {
         console.log(`MongoDB connection error: ${error.message}`)

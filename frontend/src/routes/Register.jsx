@@ -23,15 +23,25 @@ function RegisterPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(backendUrl);
-    try {
-      await axios.post(`${backendUrl}/api/user/register`, formData);
-      navigate('/login');
-    } catch (error) {
-      console.error("Some Error Occurred!!", error);
+  e.preventDefault();
+  try {
+    console.log("Submitting data:", formData);
+    await axios.post(`${backendUrl}/api/user/register`, formData);
+    navigate('/login');
+  } catch (error) {
+    console.error("Registration failed:", error.response?.data || error);
+    const errData = error.response?.data;
+
+    if (errData?.errors) {
+      alert("Validation Error:\n" + errData.errors.map(e => `• ${e.msg}`).join("\n"));
+    } else if (errData?.error) {
+      alert("Error: " + errData.error);
+    } else {
+      alert("Unknown error occurred.");
     }
-  };
+  }
+};
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -112,15 +122,15 @@ function RegisterPage() {
                   </g>
                 </svg>
                 <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your password"
-                  pattern=".{6,}"
-                  title="Password must be at least 6 characters long"
-                />
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                placeholder="Enter your password"
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}"
+                title="Password must be at least 8 characters, include uppercase, lowercase, number, and symbol"
+              />
               </label>
 
               {/* Phone Number Input */}

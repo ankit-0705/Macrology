@@ -25,7 +25,6 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(backendUrl);
     try {
       const res = await axios.post(`${backendUrl}/api/user/login`, formData);
       localStorage.setItem('auth-token',res.data.jwtToken);
@@ -95,15 +94,15 @@ function LoginPage() {
                   </g>
                 </svg>
                 <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your password"
-                  pattern=".{6,}"
-                  title="Password must be at least 6 characters long"
-                />
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                placeholder="Enter your password"
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}"
+                title="Password must be at least 8 characters, with uppercase, lowercase, number, and symbol"
+              />
               </label>
               <button type="submit" className="btn btn-soft btn-default mt-2">Submit</button>
             </form>
