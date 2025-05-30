@@ -179,7 +179,7 @@ function ProfilePage() {
           </div>
 
           {/* Streak Tracker */}
-          <div className='bg-base-300 p-3 my-3'>
+          <div className='bg-base-300 p-3 my-3 mx-5 rounded-lg'>
             <h6>Streak Tracker</h6>
             <div className="my-2">
               <div className="grid grid-cols-[repeat(auto-fit,_minmax(0.75rem,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(1rem,_1fr))] gap-1">
@@ -224,6 +224,7 @@ function ProfilePage() {
             <Bar options={chartOptions} data={chartData} />
             <p className="mt-3 text-center text-gray-400">{monthName} {year}</p>
           </div>
+          
         </main>
       </div>
     </>

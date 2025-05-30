@@ -34,25 +34,42 @@ function Dashboard() {
 
   const COLORS = ['#22c55e', '#1f2937'];
 
-  // Data arrays for Pie charts based on totals and goals
-  const dataCalories = [
-    { name: 'Consumed', value: totals.energy_kcal },
-    { name: 'Remaining', value: Math.max(dailyGoals.energy_kcal - totals.energy_kcal, 0) },
-  ];
+  // Calorie calculation and visual logic
+  const getCalorieData = (consumed, goal) => {
+    const remaining = goal - consumed;
+    const percentage = (consumed / goal) * 100;
+
+    return {
+      data: [
+        { name: 'Consumed', value: consumed },
+        { name: 'Remaining', value: remaining > 0 ? remaining : 0 },
+      ],
+      percentage: percentage.toFixed(2),
+      isOver: percentage > 100,
+    };
+  };
+
+const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
+
+
+  const getMacroData = (consumed, goal) => {
+    const remaining = goal - consumed;
+    const percentage = (consumed / goal) * 100;
+
+    return {
+      data: [
+        { name: 'Consumed', value: consumed },
+        { name: 'Remaining', value: remaining > 0 ? remaining : 0 },
+      ],
+      percentage: percentage.toFixed(2),
+      isOver: percentage > 100,
+    };
+  };
 
   const dataMacros = {
-    protein_g: [
-      { name: 'Consumed', value: totals.protein_g },
-      { name: 'Remaining', value: Math.max(dailyGoals.protein_g - totals.protein_g, 0) },
-    ],
-    fat_g: [
-      { name: 'Consumed', value: totals.fat_g },
-      { name: 'Remaining', value: Math.max(dailyGoals.fat_g - totals.fat_g, 0) },
-    ],
-    carb_g: [
-      { name: 'Consumed', value: totals.carb_g },
-      { name: 'Remaining', value: Math.max(dailyGoals.carb_g - totals.carb_g, 0) },
-    ],
+    protein_g: getMacroData(totals.protein_g, dailyGoals.protein_g),
+    fat_g: getMacroData(totals.fat_g, dailyGoals.fat_g),
+    carb_g: getMacroData(totals.carb_g, dailyGoals.carb_g),
   };
 
   // Fetch search results
@@ -148,12 +165,17 @@ function Dashboard() {
             <div className="w-40 h-40">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={dataCalories} innerRadius={50} outerRadius={70} dataKey="value" labelLine={false}>
-                    {dataCalories.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                  <Pie data={calorieChart.data} innerRadius={50} outerRadius={70} dataKey="value" labelLine={false}>
+                    {calorieChart.data.map((entry, index) => (
+                      <Cell
+                        key={`cell-cal-${index}`}
+                        fill={index === 0
+                          ? calorieChart.isOver ? '#ef4444' : '#22c55e'
+                          : '#1f2937'}
+                      />
                     ))}
                     <Label
-                      value={`${((dataCalories[0].value / (dataCalories[0].value + dataCalories[1].value)) * 100).toFixed(2)}%`}
+                      value={`${calorieChart.percentage}%`}
                       position="center"
                       fill="#fff"
                       fontSize={14}
@@ -165,8 +187,15 @@ function Dashboard() {
             </div>
             <div className="flex-1 w-full">
               <div className="mb-2 text-sm font-medium text-white">Progress</div>
-              <progress className="progress progress-success w-full h-4" value={totals.energy_kcal} max={dailyGoals.energy_kcal}></progress>
-              <p className="mt-2 text-sm text-green-400 font-semibold">{totals.energy_kcal.toFixed(2)} / {dailyGoals.energy_kcal.toFixed(2)}</p>
+              <progress
+                className={`progress w-full h-4 ${calorieChart.isOver ? 'progress-error' : 'progress-success'}`}
+                value={totals.energy_kcal}
+                max={dailyGoals.energy_kcal}
+              ></progress>
+              <p className="mt-2 text-sm font-semibold"
+                style={{ color: calorieChart.isOver ? '#ef4444' : '#22c55e' }}>
+                {totals.energy_kcal.toFixed(2)} / {dailyGoals.energy_kcal.toFixed(2)}
+              </p>
             </div>
           </div>
         </div>
@@ -174,34 +203,39 @@ function Dashboard() {
         {/* Macronutrient Charts */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           {Object.entries(dataMacros).map(([key, data]) => (
-            <div key={key} className="bg-base-300 text-white p-4 rounded shadow text-center">
-              <h3 className="capitalize font-medium mb-2 text-green-400">{key}</h3>
-              <div className="w-24 h-24 mx-auto">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={data} innerRadius={30} outerRadius={40} dataKey="value" labelLine={false}>
-                      {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                      ))}
-                      <Label
-                        value={`${((data[0].value / (data[0].value + data[1].value)) * 100).toFixed(2)}%`}
-                        position="center"
-                        fill="#fff"
-                        fontSize={12}
-                        fontWeight="bold"
+          <div key={key} className="bg-base-300 text-white p-4 rounded shadow text-center">
+            <h3 className="capitalize font-medium mb-2 text-green-400">{key}</h3>
+            <div className="w-24 h-24 mx-auto">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={data.data} innerRadius={30} outerRadius={40} dataKey="value" labelLine={false}>
+                    {data.data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={index === 0
+                          ? data.isOver ? '#ef4444' /* red */ : '#22c55e' /* green */
+                          : '#1f2937' /* gray */}
                       />
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <p className="mt-2 text-green-400">{data[0].value.toFixed(2)} g</p>
+                    ))}
+                    <Label
+                      value={`${data.percentage}%`}
+                      position="center"
+                      fill="#fff"
+                      fontSize={12}
+                      fontWeight="bold"
+                    />
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-          ))}
+            <p className="mt-2 text-green-400">{data.data[0].value.toFixed(2)} g</p>
+          </div>
+        ))}
         </div>
 
         {/* Search + Add Food */}
         <div className="flex flex-col gap-4 mb-6">
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <input
               type="text"
               value={searchQuery}
@@ -212,7 +246,7 @@ function Dashboard() {
             <select
               value={selectedMeal}
               onChange={(e) => setSelectedMeal(e.target.value)}
-              className="bg-base-200 text-white border border-green-500 p-2 rounded"
+              className="bg-base-200 text-white border border-green-500 px-3 py-2 rounded"
             >
               <option value="">Choose Meal</option>
               <option value="breakfast">Breakfast</option>
@@ -230,26 +264,33 @@ function Dashboard() {
 
           {/* Search Results */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {searchResults.map((item) => (
-              <div
-                key={item._id}
-                onClick={() => setSelectedFood(item)}
-                className={`p-3 cursor-pointer rounded border ${selectedFood?._id === item._id ? 'bg-gray-800 border-white' : 'bg-base-200'}`}
-              >
-                <h4 className="text-white font-bold">{item.food_name}</h4>
-              </div>
-            ))}
+            {searchResults.map((item) => {
+              const isSelected = selectedFood?.food_name === item.food_name;
+              return (
+                <div
+                  key={item.food_name}
+                  onClick={() => setSelectedFood(item)}
+                  className={`p-3 cursor-pointer rounded border ${isSelected ? 'border-green-500' : 'border-white'} bg-base-200`}
+                >
+                  <h4 className="text-white font-bold">{item.food_name}</h4>
+                </div>
+              );
+            })}
           </div>
+
         </div>
 
         {/* Meals */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
           {['breakfast', 'lunch', 'dinner'].map((meal) => (
-            <div key={meal} className="bg-base-300 text-white p-4 rounded shadow">
+            <div key={meal} className="flex-1 bg-base-300 text-white p-4 rounded shadow">
               <h4 className="font-semibold mb-2 text-green-500 capitalize">{meal}</h4>
-              <div className="space-y-1">
+              <div className="flex flex-wrap gap-2">
                 {meals[meal].map((item, index) => (
-                  <div key={index} className="bg-gray-800 text-white p-2 rounded">
+                  <div
+                    key={index}
+                    className="bg-gray-800 text-white px-3 py-1 rounded text-sm max-w-full break-words"
+                  >
                     {item.food_name}
                   </div>
                 ))}

@@ -53,16 +53,18 @@ function RegisterPage() {
     <div className="hero bg-base-200 min-h-screen p-5">
       <div className="hero-content flex-col lg:flex-col gap-9">
         <div className="text-center lg:text-center">
-          <h1 className="text-5xl font-bold text-success drop-shadow-[0_0_10px_rgba(34,197,94,0.7)]">
-            <Typewriter
-              words={['Welcome!']}
-              loop={0}
-              cursor
-              cursorStyle="|"
-              typeSpeed={100}
-              deleteSpeed={50}
-              delaySpeed={1500}
-            />
+          <h1 className="text-4xl sm:text-5xl font-bold text-success drop-shadow-[0_0_10px_rgba(34,197,94,0.7)] leading-tight">
+            <span className="inline-block h-[2.8rem] sm:h-[3.2rem] overflow-hidden">
+              <Typewriter
+                words={['Welcome!']}
+                loop={0}
+                cursor
+                cursorStyle="|"
+                typeSpeed={100}
+                deleteSpeed={50}
+                delaySpeed={1500}
+              />
+            </span>
           </h1>
           <p className="py-6">
             Tell us a bit about yourself to personalize your macro app. This helps us make your experience more delightful!
