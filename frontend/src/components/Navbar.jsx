@@ -48,15 +48,16 @@ function Navbar() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                 </div>
                 <ul
-                    tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                    <li><Link to="/profile">Profile</Link></li>
-                    <li><Link to="/about">About Us</Link></li>
+                tabIndex={0}
+                className="dropdown-content z-[1] menu bg-base-100 rounded-box w-40 p-2 shadow text-sm sm:text-base lg:text-lg space-y-1"
+                >
+                <li><Link className="py-2 px-4" to="/profile">Profile</Link></li>
+                <li><Link className="py-2 px-4" to="/about">About Us</Link></li>
                 </ul>
                 </div>
             </div>
             <div className="navbar-center">
-                <Link className="btn btn-ghost text-xl" to="/dashboard">Macrology</Link>
+                <Link className="btn btn-ghost text-xl text-slate-100" to="/dashboard">Macrology</Link>
             </div>
             <div className="navbar-end">
                 <div className="dropdown dropdown-end">
@@ -65,7 +66,8 @@ function Navbar() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                     </svg>
                     </div>
-                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
+                    <ul tabIndex={0} className="dropdown-content z-[1] menu bg-base-100 rounded-box w-40 p-2 shadow
+                    text-sm sm:text-base lg:text-lg space-y-1">
                     <li><button onClick={handleGoal}>Set Your Goal</button></li>
                     <li><button onClick={handleClear}>Clear Everything</button></li>
                     <li><Link to='/login'>Log Out</Link></li>

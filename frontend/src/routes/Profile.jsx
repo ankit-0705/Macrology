@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import MacroContext from '../context/MacroContext';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
@@ -13,6 +13,31 @@ import {
   Legend
 } from 'chart.js';
 
+import profile1 from '../assets/profile-images/1.jpg';
+import profile2 from '../assets/profile-images/2.jpg';
+import profile3 from '../assets/profile-images/3.jpg';
+import profile4 from '../assets/profile-images/4.jpg';
+import profile5 from '../assets/profile-images/5.jpg';
+import profile6 from '../assets/profile-images/6.jpg';
+import profile7 from '../assets/profile-images/7.jpg';
+import profile8 from '../assets/profile-images/8.jpg';
+import profile9 from '../assets/profile-images/9.jpg';
+import profile10 from '../assets/profile-images/10.jpg';
+import profile11 from '../assets/profile-images/11.jpg';
+import profile12 from '../assets/profile-images/12.jpg';
+import profile13 from '../assets/profile-images/13.jpg';
+import profile14 from '../assets/profile-images/14.jpg';
+import profile15 from '../assets/profile-images/15.jpg';
+import profile16 from '../assets/profile-images/16.jpg';
+import profile17 from '../assets/profile-images/17.jpg';
+import profile18 from '../assets/profile-images/18.jpg';
+import profile19 from '../assets/profile-images/19.jpg';
+import profile20 from '../assets/profile-images/20.jpg';
+import profile21 from '../assets/profile-images/21.jpg';
+import profile22 from '../assets/profile-images/22.jpg';
+import profile23 from '../assets/profile-images/23.jpg';
+import profile24 from '../assets/profile-images/24.jpg';
+
 const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -21,6 +46,15 @@ function ProfilePage() {
   const { profileInfo, infoGetter, macroInfo } = useContext(MacroContext);
   const [editInfo, setEditInfo] = useState({ name: '', email: '', pnum: '' });
   const [monthOffset, setMonthOffset] = useState(0);
+
+  const profileImages = [
+    profile1, profile2, profile3, profile4, profile5, profile6, profile7,profile8, profile9, profile10, profile11, profile12, profile13,profile14, profile15, profile16, profile17, profile18, profile19, profile20, profile21, profile22, profile23, profile24
+  ];
+
+  const randomProfileImage = useMemo(()=>{
+    const randomIndex = Math.floor(Math.random()*profileImages.length);
+    return profileImages[randomIndex];
+  });
 
   const handleClick = () => {
     setEditInfo({
@@ -119,16 +153,16 @@ function ProfilePage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-base-200 text-white overflow-x-hidden">
+      <div className="min-h-screen bg-base-200 text-slate-100 overflow-x-hidden">
         <main className="flex-1">
           <div className="flex flex-col items-center px-6 pt-6 max-w-5xl mx-auto">
 
             {/* Banner and Profile Image */}
             <div className="w-full relative">
-              <img src="https://thumbs.dreamstime.com/b/abstract-food-background-top-view-dark-rustic-kitchen-table-wooden-cutting-board-cooking-spoon-frame-banner-137304354.jpg"
+              <img src="src/assets/Banner.jpg"
                 alt="Banner" className="w-full h-48 object-cover rounded-lg" />
               <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">
-                <img src="https://masterpiecer-images.s3.yandex.net/42f8251e747a11ee9c29b646b2a0ffc1:upscaled"
+                <img src={randomProfileImage}
                   alt="Profile" className="w-28 h-28 rounded-full border-4 border-black shadow-lg" />
               </div>
             </div>
@@ -138,7 +172,7 @@ function ProfilePage() {
               <h1 className="text-3xl font-bold text-center">{profileInfo?.name || 'Loading...'}</h1>
 
               <div className="mt-10 w-full max-w-3xl mx-auto flex justify-between items-center">
-                <h2 className="text-white text-lg font-semibold">Remaining Info:</h2>
+                <h2 className="text-slate-100 text-lg font-semibold">Remaining Info:</h2>
                 <button onClick={handleClick} className="text-green-400 hover:text-green-300 transition text-sm flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6-6 3 3-6 6H9v-3z" />
@@ -148,7 +182,7 @@ function ProfilePage() {
 
                 {/* Modal */}
                 <dialog id="my_modal_1" className="modal">
-                  <div className="modal-box bg-base-100 text-white">
+                  <div className="modal-box bg-base-100 text-slate-100">
                     <h3 className="font-bold text-lg text-green-500 mb-4">Edit Profile Info</h3>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                       <input type="text" name="name" value={editInfo.name} onChange={handleChange} required placeholder="Username"
@@ -169,8 +203,8 @@ function ProfilePage() {
               {/* Extra Info */}
               <div className="mt-2 collapse bg-base-100 border border-base-300 rounded">
                 <input type="checkbox" />
-                <div className="collapse-title font-semibold text-white">Click to view more info</div>
-                <div className="collapse-content text-white flex flex-col gap-4">
+                <div className="collapse-title font-semibold text-slate-100">Click to view more info</div>
+                <div className="collapse-content text-slate-100 flex flex-col gap-4">
                   <p><span className="font-medium">Email:</span> {profileInfo?.email}</p>
                   <p><span className="font-medium">Phone Number:</span> {profileInfo?.pnum}</p>
                 </div>
@@ -201,7 +235,7 @@ function ProfilePage() {
                     return (
                       <div
                         key={isoDate}
-                        className={`w-full aspect-square rounded ${isActive ? 'bg-green-500' : 'bg-gray-700'}`}
+                        className={`w-full aspect-square rounded ${isActive ? 'bg-green-600' : 'bg-gray-700'}`}
                         title={isoDate}
                       ></div>
                     );
@@ -215,7 +249,7 @@ function ProfilePage() {
           {/* 📊 Chart */}
           <div className="bg-base-300 p-5 mx-5 rounded-lg my-5">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-white">Monthly Macro Consumption</h3>
+              <h3 className="text-lg font-semibold text-slate-100">Monthly Macro Consumption</h3>
               <div className="flex gap-2">
                 <button onClick={() => setMonthOffset(prev => prev - 1)} className="btn btn-sm btn-outline">Previous</button>
                 <button onClick={() => setMonthOffset(prev => prev + 1)} className="btn btn-sm btn-outline">Next</button>

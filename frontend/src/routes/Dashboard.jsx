@@ -31,9 +31,6 @@ function Dashboard() {
     }
   });
 
-
-  const COLORS = ['#22c55e', '#1f2937'];
-
   // Calorie calculation and visual logic
   const getCalorieData = (consumed, goal) => {
     const remaining = goal - consumed;
@@ -124,8 +121,8 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
       <div className="min-h-screen p-7">
 
         {/* Streak Tracker */}
-        <div className='bg-base-300 p-3 my-3'>
-          <h6>Streak Tracker</h6>
+        <div className='bg-base-300 p-3 my-3 rounded'>
+          <h6 className='text-slate-100'>Streak Tracker</h6>
           <div className="my-2">
             <div className="grid grid-cols-[repeat(auto-fit,_minmax(0.75rem,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(1rem,_1fr))] gap-1">
               {(() => {
@@ -146,7 +143,7 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
                   return (
                     <div
                       key={isoDate}
-                      className={`w-full aspect-square rounded ${isActive ? 'bg-green-500' : 'bg-gray-700'}`}
+                      className={`w-full aspect-square rounded ${isActive ? 'bg-green-600' : 'bg-gray-700'}`}
                       title={isoDate}
                     ></div>
                   );
@@ -156,79 +153,99 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
           </div>
         </div>
 
-
-
-        {/* Calories Pie */}
-        <div className="bg-base-300 text-white p-4 rounded shadow mb-6">
-          <h2 className="text-center font-semibold mb-4 text-green-400">Calories</h2>
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="w-40 h-40">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={calorieChart.data} innerRadius={50} outerRadius={70} dataKey="value" labelLine={false}>
-                    {calorieChart.data.map((entry, index) => (
-                      <Cell
-                        key={`cell-cal-${index}`}
-                        fill={index === 0
-                          ? calorieChart.isOver ? '#ef4444' : '#22c55e'
-                          : '#1f2937'}
-                      />
-                    ))}
-                    <Label
-                      value={`${calorieChart.percentage}%`}
-                      position="center"
-                      fill="#fff"
-                      fontSize={14}
-                      fontWeight="bold"
+    {/* Calories Pie */}
+    <div className="bg-base-300 text-slate-100 p-4 rounded shadow mb-6">
+        <h2 className="text-center font-semibold mb-4 text-green-500">Calories</h2>
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          <div className="w-40 h-40">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={calorieChart.data}
+                  innerRadius={50}
+                  outerRadius={70}
+                  dataKey="value"
+                  labelLine={false}
+                  stroke="#e0e5cd"
+                  strokeWidth={1}
+                >
+                  {calorieChart.data.map((entry, index) => (
+                    <Cell
+                      key={`cell-cal-${index}`}
+                      fill={
+                        index === 0
+                          ? calorieChart.isOver
+                            ? '#991b1b' // bright red for over
+                            : '#22c55e' // bright green for under
+                          : '#1f2937'
+                      }
                     />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex-1 w-full">
-              <div className="mb-2 text-sm font-medium text-white">Progress</div>
-              <progress
-                className={`progress w-full h-4 ${calorieChart.isOver ? 'progress-error' : 'progress-success'}`}
-                value={totals.energy_kcal}
-                max={dailyGoals.energy_kcal}
-              ></progress>
-              <p className="mt-2 text-sm font-semibold"
-                style={{ color: calorieChart.isOver ? '#ef4444' : '#22c55e' }}>
-                {totals.energy_kcal.toFixed(2)} / {dailyGoals.energy_kcal.toFixed(2)}
-              </p>
-            </div>
+                  ))}
+                  <Label
+                    value={`${calorieChart.percentage}%`}
+                    position="center"
+                    fill="#f1f5f9"
+                    fontSize={14}
+                    fontWeight="semibold"
+                  />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="mb-2 text-sm font-medium text-slate-100">Progress</div>
+            <progress
+              className={`progress w-full h-4 ${
+                calorieChart.isOver ? 'progress-error' : 'progress-success'
+              }`}
+              value={totals.energy_kcal}
+              max={dailyGoals.energy_kcal}
+              style={{
+                filter: 'brightness(0.75)', // reduce brightness for progress bar
+              }}
+            ></progress>
+            <p
+              className="mt-2 text-sm font-semibold"
+              style={{
+                color: calorieChart.isOver ? '#ff4d4d' : '#4ade80', // brighter versions
+                filter: 'brightness(1.2)', // increase brightness of text
+              }}
+            >
+              {totals.energy_kcal.toFixed(2)} / {dailyGoals.energy_kcal.toFixed(2)}
+            </p>
           </div>
         </div>
+      </div>
 
         {/* Macronutrient Charts */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
           {Object.entries(dataMacros).map(([key, data]) => (
-          <div key={key} className="bg-base-300 text-white p-4 rounded shadow text-center">
-            <h3 className="capitalize font-medium mb-2 text-green-400">{key}</h3>
+          <div key={key} className="bg-base-300 text-slate-100 p-4 rounded shadow text-center">
+            <h3 className="capitalize font-medium mb-2 text-green-500">{key}</h3>
             <div className="w-24 h-24 mx-auto">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={data.data} innerRadius={30} outerRadius={40} dataKey="value" labelLine={false}>
+                  <Pie data={data.data} innerRadius={30} outerRadius={40} dataKey="value" labelLine={false} stroke='#e0e5cd' strokeWidth={1}>
                     {data.data.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={index === 0
-                          ? data.isOver ? '#ef4444' /* red */ : '#22c55e' /* green */
+                          ? data.isOver ? '#991b1b' /* red */ : '#22c55e' /* green */
                           : '#1f2937' /* gray */}
                       />
                     ))}
                     <Label
                       value={`${data.percentage}%`}
                       position="center"
-                      fill="#fff"
+                      fill="#f1f5f9"
                       fontSize={12}
-                      fontWeight="bold"
+                      fontWeight="semibold"
                     />
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-green-400">{data.data[0].value.toFixed(2)} g</p>
+            <p className="mt-2 text-green-500">{data.data[0].value.toFixed(2)} g</p>
           </div>
         ))}
         </div>
@@ -241,12 +258,12 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search food item..."
-              className="flex-grow px-4 py-2 rounded bg-base-200 text-white border border-green-500 placeholder-green-400"
+              className="flex-grow px-4 py-2 rounded bg-base-200 text-slate-100 border border-green-600 placeholder-green-500"
             />
             <select
               value={selectedMeal}
               onChange={(e) => setSelectedMeal(e.target.value)}
-              className="bg-base-200 text-white border border-green-500 px-3 py-2 rounded"
+              className="bg-base-200 text-slate-200 border border-green-600 px-3 py-2 rounded"
             >
               <option value="">Choose Meal</option>
               <option value="breakfast">Breakfast</option>
@@ -270,9 +287,9 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
                 <div
                   key={item.food_name}
                   onClick={() => setSelectedFood(item)}
-                  className={`p-3 cursor-pointer rounded border ${isSelected ? 'border-green-500' : 'border-white'} bg-base-200`}
+                  className={`p-3 cursor-pointer rounded border ${isSelected ? 'border-green-600' : 'border-#f1f5f9'} bg-base-200`}
                 >
-                  <h4 className="text-white font-bold">{item.food_name}</h4>
+                  <h4 className="text-slate-200 font-semibold">{item.food_name}</h4>
                 </div>
               );
             })}
@@ -283,13 +300,13 @@ const calorieChart = getCalorieData(totals.energy_kcal, dailyGoals.energy_kcal);
         {/* Meals */}
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           {['breakfast', 'lunch', 'dinner'].map((meal) => (
-            <div key={meal} className="flex-1 bg-base-300 text-white p-4 rounded shadow">
+            <div key={meal} className="flex-1 bg-base-300 text-slate-100 p-4 rounded shadow">
               <h4 className="font-semibold mb-2 text-green-500 capitalize">{meal}</h4>
               <div className="flex flex-wrap gap-2">
                 {meals[meal].map((item, index) => (
                   <div
                     key={index}
-                    className="bg-gray-800 text-white px-3 py-1 rounded text-sm max-w-full break-words"
+                    className="bg-gray-800 text-slate-100 px-3 py-1 rounded text-sm max-w-full break-words"
                   >
                     {item.food_name}
                   </div>

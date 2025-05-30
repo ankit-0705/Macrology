@@ -9,19 +9,19 @@ function AboutPage() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-5xl mx-auto p-6 md:p-12">
-            <h1 className="text-4xl font-bold text-center mb-8 text-green-400">About Us</h1>
+            <h1 className="text-4xl font-bold text-center mb-8 text-green-500">About Us</h1>
 
             <div className="bg-base-100 shadow-2xl border border-green-600 rounded-lg p-8">
               <p className="text-lg leading-relaxed mb-6 text-gray-300">
-                <span className="text-green-400 font-semibold">Macrology</span> is a modern macro counter web application — designed for anyone looking to track calories, protein, carbs, and fats in a clean, focused space.
-                Whether you're working toward a fitness goal or just want more insight into your nutrition, <span className="text-green-400 font-semibold">Macrology</span> helps you do it with clarity and ease.
+                <span className="text-green-500 font-semibold">Macrology</span> is a modern macro counter web application — designed for anyone looking to track calories, protein, carbs, and fats in a clean, focused space.
+                Whether you're working toward a fitness goal or just want more insight into your nutrition, <span className="text-green-500 font-semibold">Macrology</span> helps you do it with clarity and ease.
               </p>
 
               {/* WHY WE BUILT THIS */}
               <div className="mt-10 bg-gray-900 p-6 rounded-lg border border-gray-700 text-center">
-                <h2 className="text-2xl font-bold mb-4 text-green-400">Why We Built This</h2>
+                <h2 className="text-2xl font-bold mb-4 text-green-500">Why We Built This</h2>
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  We created <span className="text-green-400 font-semibold">Macrology</span> because we were tired of juggling multiple fitness apps, notes, and spreadsheets to track what we eat. We wanted a central place where we could:
+                  We created <span className="text-green-500 font-semibold">Macrology</span> because we were tired of juggling multiple fitness apps, notes, and spreadsheets to track what we eat. We wanted a central place where we could:
                   <br /><br />
                   ✦ Log daily macros with ease.<br />
                   ✦ Visualize progress with clean and simple charts.<br />
@@ -34,17 +34,17 @@ function AboutPage() {
               {/* TEAM / MISSION / VISION CARDS */}
               <div className="grid md:grid-cols-3 gap-8 text-center mt-10">
                 <div className="bg-gray-900 p-4 rounded-lg border border-gray-700 hover:scale-105 transition">
-                  <h3 className="font-bold text-lg mb-2 text-green-400">Our Team</h3>
+                  <h3 className="font-bold text-lg mb-2 text-green-500">Our Team</h3>
                   <p className="text-sm text-gray-400">A team of developers, designers, and wellness advocates who believe simplicity empowers consistency.</p>
                 </div>
 
                 <div className="bg-gray-900 p-4 rounded-lg border border-gray-700 hover:scale-105 transition">
-                  <h3 className="font-bold text-lg mb-2 text-green-400">Our Mission</h3>
+                  <h3 className="font-bold text-lg mb-2 text-green-500">Our Mission</h3>
                   <p className="text-sm text-gray-400">To help people reach their nutrition goals with tools that are intuitive, insightful, and distraction-free.</p>
                 </div>
 
                 <div className="bg-gray-900 p-4 rounded-lg border border-gray-700 hover:scale-105 transition">
-                  <h3 className="font-bold text-lg mb-2 text-green-400">Our Vision</h3>
+                  <h3 className="font-bold text-lg mb-2 text-green-500">Our Vision</h3>
                   <p className="text-sm text-gray-400">To become the go-to platform for macro tracking — simple enough for beginners, powerful enough for pros.</p>
                 </div>
               </div>
