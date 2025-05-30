@@ -38,6 +38,8 @@ import profile22 from '../assets/profile-images/22.jpg';
 import profile23 from '../assets/profile-images/23.jpg';
 import profile24 from '../assets/profile-images/24.jpg';
 
+import Banner from '../assets/Banner.jpg';
+
 const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -159,7 +161,7 @@ function ProfilePage() {
 
             {/* Banner and Profile Image */}
             <div className="w-full relative">
-              <img src="src/assets/Banner.jpg"
+              <img src={Banner}
                 alt="Banner" className="w-full h-48 object-cover rounded-lg" />
               <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">
                 <img src={randomProfileImage}
