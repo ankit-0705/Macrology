@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import MacroContext from '../context/MacroContext';
+const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
 function Navbar() {
 
@@ -12,7 +13,7 @@ function Navbar() {
     if (!confirmDelete) return;
 
     try {
-        const response = await axios.delete('http://127.0.0.1:5000/api/macros/deleteAll');
+        const response = await axios.delete(`${backendUrl}/api/macros/deleteAll`);
         alert(`Success: ${response.data.deletedCount} entries deleted.`);
     } catch (error) {
         console.error('Error clearing macros:', error);
@@ -21,22 +22,25 @@ function Navbar() {
     };
 
     const handleGoal = () => {
-    const newEnergy = prompt('Enter daily calorie goal (kcal):', dailyGoals.energy_kcal);
-    const newProtein = prompt('Enter daily protein goal (g):', dailyGoals.protein_g);
-    const newFat = prompt('Enter daily fat goal (g):', dailyGoals.fat_g);
-    const newCarb = prompt('Enter daily carb goal (g):', dailyGoals.carb_g);
+        const dev = confirm("Development of this feature is under progress. Still wanna try?");
+        if (dev) {
+            const newEnergy = prompt('Enter daily calorie goal (kcal):', dailyGoals.energy_kcal);
+            const newProtein = prompt('Enter daily protein goal (g):', dailyGoals.protein_g);
+            const newFat = prompt('Enter daily fat goal (g):', dailyGoals.fat_g);
+            const newCarb = prompt('Enter daily carb goal (g):', dailyGoals.carb_g);
 
-    if (newEnergy && newProtein && newFat && newCarb) {
-      setDailyGoals({
-        energy_kcal: Number(newEnergy),
-        protein_g: Number(newProtein),
-        fat_g: Number(newFat),
-        carb_g: Number(newCarb),
-      });
-      alert('Goals updated!');
-    } else {
-      alert('Goal update cancelled or invalid input');
-    }
+            if (newEnergy && newProtein && newFat && newCarb) {
+            setDailyGoals({
+                energy_kcal: Number(newEnergy),
+                protein_g: Number(newProtein),
+                fat_g: Number(newFat),
+                carb_g: Number(newCarb),
+            });
+            alert('Goals updated!');
+            } else {
+            alert('Goal update cancelled or invalid input');
+            }
+        }
   };
 
   return (
